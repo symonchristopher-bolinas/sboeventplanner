@@ -209,23 +209,33 @@ if (isset($_SESSION['admin_logged_in']) || isset($_SESSION['client_logged_in']))
   <div class="otp-modal-content">
     <span class="close" onclick="document.getElementById('otpModal').style.display='none'">&times;</span>
     <h3>Enter OTP</h3>
-    <form method="POST" action="verify_otp.php">
-      <input type="text" name="otp" placeholder="Enter OTP" required><br>
-      <input type="hidden" name="email" value="<?php echo htmlspecialchars($_SESSION['email_for_verification'] ?? ''); ?>">
+    <form action="verify_otp.php" method="POST">
+      <input type="text" name="otp" placeholder="Enter OTP" required>
+      <input type="hidden" name="email" value="<?php echo $_SESSION['email_for_verification'] ?? ''; ?>">
       <button type="submit">Verify OTP</button>
     </form>
     <p id="errorMessage" style="color:red; display:none;">Please enter a valid OTP</p>
   </div>
 </div>
 
-<script>
-  // Display OTP Modal after successful registration (if session has email for verification)
-  <?php if (isset($_SESSION['email_for_verification'])): ?>
-    document.getElementById('otpModal').style.display = 'block';
-    <?php unset($_SESSION['email_for_verification']); ?> // Clear session after modal is displayed
-  <?php endif; ?>
+<!-- Modal & Error Trigger Script -->
+<?php if (isset($_GET['otp_error'])): ?>
+  <script>
+    window.addEventListener("load", function () {
+      document.getElementById('otpModal').style.display = 'block';
+      document.getElementById('errorMessage').style.display = 'block';
+    });
+  </script>
+<?php elseif (isset($_SESSION['email_for_verification'])): ?>
+  <script>
+    window.addEventListener("load", function () {
+      document.getElementById('otpModal').style.display = 'block';
+    });
+  </script>
+<?php endif; ?>
 
-  // Close OTP Modal when user clicks outside the modal
+<!-- Close modal when clicking outside -->
+<script>
   window.onclick = function(event) {
     var modal = document.getElementById('otpModal');
     if (event.target == modal) {

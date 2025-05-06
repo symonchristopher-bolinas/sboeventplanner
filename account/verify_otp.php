@@ -1,13 +1,8 @@
 <?php
 session_start();
 
-// Database connection
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "eventplanner";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
+// DB Connection
+$conn = new mysqli("localhost", "root", "", "eventplanner");
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
@@ -16,23 +11,29 @@ $email = $_POST['email'] ?? '';
 $enteredOtp = $_POST['otp'] ?? '';
 
 if (empty($email) || empty($enteredOtp)) {
-    echo "<script>alert('Missing data.'); window.location.href='signup.php';</script>";
+    header("Location: signup.php?otp_error=1");
     exit();
 }
 
-// Check OTP from database
-$sql = "SELECT verification_code FROM client_account WHERE clientemail = ?";
-$stmt = $conn->prepare($sql);
+// Fetch OTP from DB
+$stmt = $conn->prepare("SELECT verification_code FROM client_account WHERE clientemail = ?");
 $stmt->bind_param("s", $email);
 $stmt->execute();
-$stmt->bind_result($dbOtp);
-$stmt->fetch();
-$stmt->close();
+$result = $stmt->get_result();
 
-if ($enteredOtp === $dbOtp) {
-    // OTP is correct, but do not clear the verification code
-    echo "<script>alert('OTP verified successfully!'); window.location.href='login.php';</script>";
+if ($row = $result->fetch_assoc()) {
+    $dbOtp = trim($row['verification_code']);
+    if ($enteredOtp === $dbOtp) {
+        // Success
+        unset($_SESSION['email_for_verification']); // Optional: clear session
+        echo "<script>alert('OTP verified successfully!'); window.location.href='login.php';</script>";
+    } else {
+        // Failed - redirect back
+        $_SESSION['email_for_verification'] = $email;
+        header("Location: signup.php?otp_error=1");
+    }
 } else {
-    echo "<script>alert('Incorrect OTP.'); window.location.href='signup.php';</script>";
+    // Email not found
+    header("Location: signup.php?otp_error=1");
 }
 exit();
