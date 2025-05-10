@@ -23,7 +23,6 @@ session_start();
                     <li><a href="account/logout.php">Logout</a></li>
                 <?php else: ?>
                     <li><a href="account/login.php">Sign In</a></li>
-                    <li><a href="account/signup.php">Sign Up</a></li>
                 <?php endif; ?>
             </ul>
         </nav>

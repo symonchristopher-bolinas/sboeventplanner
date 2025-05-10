@@ -34,14 +34,16 @@ if (!isset($_SESSION['admin_logged_in'])) {
 <aside class="sidebar">
     <div class="toggle-btn">&#9776;</div>
     <ul>
-        <li class="active">Dashboard</li>
-        <li>User Management</li>
+        <li id="dashboardTab" class="active">Dashboard</li>
+        <li id="userManagementTab">User Management</li>
         <li>Event Monitoring</li>
         <li>Support Ticket</li>
         <li>Budget Analytics</li>
     </ul>
 </aside>
 
+<!-- Dashboard Content -->
+<div id="dashboardContent">
 <main class="content">
     <h1>Dashboard</h1>
     <p>Welcome back! Here's what's happening today.</p>
@@ -82,9 +84,34 @@ if (!isset($_SESSION['admin_logged_in'])) {
             </div>
         </div>
     </div>
-
 </main>
+</div>
 
+<!-- User Management Content -->
+<div id="userManagementContent" style="display:none;">
+    <main class="content">
+        <h1>User Management</h1>
+        <div style="margin-bottom: 15px;">
+            <a href="signup.php" class="add-user-btn" style="padding: 8px 16px; background-color: #007BFF; color: white; text-decoration: none; border-radius: 5px;">+ Add User</a>
+        </div>
+        <table border="1" width="100%" id="userTable">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Department</th>
+                    <th>Organization</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Filled dynamically -->
+            </tbody>
+        </table>
+    </main>
+</div>
+
+<!-- Chart Script -->
 <script>
 const ctx = document.getElementById('eventsChart').getContext('2d');
 const eventsChart = new Chart(ctx, {
@@ -106,6 +133,53 @@ const eventsChart = new Chart(ctx, {
         }
     }
 });
+</script>
+
+<!-- Tab Switching & User Fetching Script -->
+<script>
+document.getElementById("dashboardTab").addEventListener("click", function () {
+    document.getElementById("dashboardContent").style.display = "block";
+    document.getElementById("userManagementContent").style.display = "none";
+    this.classList.add("active");
+    document.getElementById("userManagementTab").classList.remove("active");
+});
+
+document.getElementById("userManagementTab").addEventListener("click", function () {
+    document.getElementById("dashboardContent").style.display = "none";
+    document.getElementById("userManagementContent").style.display = "block";
+    this.classList.add("active");
+    document.getElementById("dashboardTab").classList.remove("active");
+
+    // Fetch users
+    fetch("get_users.php")
+        .then(response => response.json())
+        .then(users => {
+            const tbody = document.querySelector("#userTable tbody");
+            tbody.innerHTML = "";
+            users.forEach(user => {
+                const row = `<tr>
+                    <td>${user.clientemail}</td>
+                    <td>${user.department}</td>
+                    <td>${user.organization}</td>
+                    <td>${user.verification_code ? "Verified" : "Unverified"}</td>
+                    <td><button onclick="deleteUser('${user.id}')">Delete</button></td>
+                </tr>`;
+                tbody.innerHTML += row;
+            });
+        })
+        .catch(err => console.error("Error loading users:", err));
+});
+
+function deleteUser(id) {
+    if (confirm("Delete this user?")) {
+        fetch(`delete_user.php?id=${id}`)
+            .then(res => res.text())
+            .then(msg => {
+                alert(msg);
+                document.getElementById("userManagementTab").click(); // refresh
+            });
+    }
+}
 </script>
 
 </body>

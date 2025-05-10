@@ -43,12 +43,6 @@ if (isset($_SESSION['client_logged_in'])) {
           <input type="password" name="password" id="password" placeholder="Password" required>
           <i class="fa-solid fa-eye toggle-password" id="togglePassword" onclick="togglePassword()"></i>
         </div>
-
-        <div class="links">
-          <a href="#">forgot password</a>
-          <a href="signup.php">don't have an account</a>
-        </div>
-
         <button type="submit">SIGN IN</button>
       </form>
     </div>

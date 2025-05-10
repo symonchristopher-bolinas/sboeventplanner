@@ -1,9 +1,5 @@
 <?php
 session_start();
-if (isset($_SESSION['admin_logged_in']) || isset($_SESSION['client_logged_in'])) {
-    header('Location: ../index.php');
-    exit();
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -166,7 +162,7 @@ if (isset($_SESSION['admin_logged_in']) || isset($_SESSION['client_logged_in']))
 <div class="signup-form-container">
   <a href="login.php" class="close-button">&times;</a>
   <div class="form-box">
-    <h2>Sign Up</h2>
+    <h2>Add User</h2>
     <?php if (isset($_GET['error'])): ?>
       <p class="error" style="color:red;"><?php echo htmlspecialchars($_GET['error']); ?></p>
     <?php endif; ?>
@@ -199,7 +195,7 @@ if (isset($_SESSION['admin_logged_in']) || isset($_SESSION['client_logged_in']))
         <input type="checkbox" required> By creating an account, you agree to our <a href="#">Terms</a>.<br>
       </div>
 
-      <button type="submit" class="signup-button">SIGN UP</button>
+      <button type="submit" class="signup-button">ADD USER</button>
     </form>
   </div>
 </div>
