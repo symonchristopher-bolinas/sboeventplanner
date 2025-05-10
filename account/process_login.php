@@ -13,19 +13,22 @@ $user = trim($_POST['username']);
 $pass = trim($_POST['password']);
 
 // admin_account
-$stmt = $conn->prepare("SELECT adminuser, adminpass FROM admin_account WHERE adminuser = ?");
+$stmt = $conn->prepare("SELECT adminuser, adminpass, role FROM admin_account WHERE adminuser = ?");
+
 $stmt->bind_param("s", $user);
 $stmt->execute();
 $result = $stmt->get_result();
 
 if ($row = $result->fetch_assoc()) {
-    if ($pass === $row['adminpass']) { 
+    if ($pass === $row['adminpass']) {
         $_SESSION['admin_logged_in'] = true;
         $_SESSION['admin_username'] = $row['adminuser'];
+        $_SESSION['role'] = $row['role']; // ✅ now this works
         header('Location: admin_dashboard.php');
         exit();
     }
 }
+
 $stmt->close();
 
 // client_account

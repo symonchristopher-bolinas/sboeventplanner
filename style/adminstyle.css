@@ -152,3 +152,32 @@ body, html {
     text-decoration: none;
     font-weight: bold;
 }
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    right: 0;
+    margin-top: 10px;
+    border-radius: 5px;
+    z-index: 100;
+}
+.dropdown-menu a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+}
+.dropdown-menu a:hover {
+    background-color: #f0f0f0;
+}
+.user-dropdown {
+    position: relative;
+    display: inline-block;
+    margin-left: 20px;
+    cursor: pointer;
+}
+.fa-user {
+    font-size: 18px;
+}
