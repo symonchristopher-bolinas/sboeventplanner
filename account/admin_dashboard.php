@@ -117,7 +117,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
                 <tr style="background-color: #003366; color: white; padding: 10px;">
                     <th>Email</th>
                     <th>Department</th>
-                    <th>Organization</th>
+                    <th>User Type</th>
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>

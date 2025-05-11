@@ -174,8 +174,10 @@ session_start();
       <input type="password" name="confirm_password" placeholder="Confirm Password" required>
 
       <select name="organization" required>
-          <option value="">Select Organization</option>
-          <option value="Org1">Organization 1</option>
+          <option value="">User Type</option>
+          <option value="sbopresident">SBO President</option>
+          <option value="sbovicepresident">SBO Vice President</option>
+          <option value="sbotresurer">SBO Tresurer</option>
       </select>
 
       <select name="department" required>

@@ -23,22 +23,34 @@ session_start();
         
         <!-- Only show user dropdown if admin or client is logged in -->
         <?php if (isset($_SESSION['admin_logged_in']) || isset($_SESSION['client_logged_in'])): ?>
-            <li><div class="admin-info">
-            <i class="icon-calendar"></i>
-            <i class="icon-bell"></i>
-            <span><?php echo htmlspecialchars($_SESSION['role'] ?? ''); ?></span>
+            <li>
+    <div class="admin-info">
+        <i class="icon-calendar"></i>
+        <i class="icon-bell"></i>
 
-            <!-- User Dropdown -->
-            <div class="user-dropdown" id="userDropdown">
-                <i class="fa-solid fa-user dropdown-toggle" onclick="toggleDropdown()"></i>
-                <div class="dropdown-menu" id="dropdownMenu">
-                    <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'superadmin'): ?>
-                        <a href="account/admin_dashboard.php">Admin Dashboard</a>
-                    <?php endif; ?>
-                    <a href="account/logout.php">Logout</a>
-                </div>
+        <!-- Display role if set -->
+        <?php if (isset($_SESSION['role'])): ?>
+            <span><?php echo htmlspecialchars($_SESSION['role']); ?></span>
+        <?php endif; ?>
+
+        <!-- Display client email if set -->
+        <?php if (isset($_SESSION['client_email'])): ?>
+            <span><?php echo htmlspecialchars($_SESSION['client_email']); ?></span>
+        <?php endif; ?>
+
+        <!-- User Dropdown -->
+        <div class="user-dropdown" id="userDropdown">
+            <i class="fa-solid fa-user dropdown-toggle" onclick="toggleDropdown()"></i>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'superadmin'): ?>
+                    <a href="account/admin_dashboard.php">Admin Dashboard</a>
+                <?php endif; ?>
+                <a href="account/logout.php">Logout</a>
             </div>
-        </div></li>
+        </div>
+    </div>
+</li>
+
         <?php else: ?>
             <!-- Show sign in only if no one is logged in -->
             <li><a href="account/login.php">Sign In</a></li>
