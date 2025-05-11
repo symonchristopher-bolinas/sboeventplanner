@@ -52,7 +52,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
         <li id="userManagementTab">User Management</li>
         <li>Event Monitoring</li>
         <li>Budget Analytics</li>
-        <li>Venue</li>
+        <li id="venueTab">Venue</li>
     </ul>
 </aside>
 
@@ -129,6 +129,34 @@ if (!isset($_SESSION['admin_logged_in'])) {
     </main>
 </div>
 
+
+<!-- Venue Content -->
+<div id="venueContent" style="display:none;">
+    <main class="content" >
+        <h1 style="margin-bottom: 0;">Venue Management</h1>
+        <div>
+            <a href="venue.php" class="add-user-btn" style="background-color: #28a745; color: white; padding: 8px 16px; border: none; border-radius: 20px; float: right; cursor: pointer;" >+ Add Venue</a>
+        </div>
+        <div style="margin: 20px 0; clear: both;">
+      <input type="text" placeholder="Search User..." style="width: 50%; padding: 8px; border-radius: 20px; border: 1px solid #ccc;">
+    </div>
+        <table  style="width: 100%; border-collapse: collapse;" width="100%" id="userTable">
+            <thead>
+                <tr style="background-color: #003366; color: white; padding: 10px;">
+                    <th>Organizer</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Venue</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody style="text-align: center; padding: 10px; border-bottom: 1px solid #ddd;">
+                <!-- Filled dynamically -->
+            </tbody>
+        </table>
+    </main>
+</div>
+
 <!-- Chart Script -->
 <script>
 const ctx = document.getElementById('eventsChart').getContext('2d');
@@ -158,14 +186,18 @@ const eventsChart = new Chart(ctx, {
 document.getElementById("dashboardTab").addEventListener("click", function () {
     document.getElementById("dashboardContent").style.display = "block";
     document.getElementById("userManagementContent").style.display = "none";
+    document.getElementById("venueContent").style.display = "none";
     this.classList.add("active");
+    document.getElementById("venueTab").classList.remove("active");
     document.getElementById("userManagementTab").classList.remove("active");
 });
 
 document.getElementById("userManagementTab").addEventListener("click", function () {
     document.getElementById("dashboardContent").style.display = "none";
+    document.getElementById("venueContent").style.display = "none";
     document.getElementById("userManagementContent").style.display = "block";
     this.classList.add("active");
+    document.getElementById("venueTab").classList.remove("active");
     document.getElementById("dashboardTab").classList.remove("active");
 
     // Fetch users
@@ -195,6 +227,46 @@ function deleteUser(id) {
             .then(msg => {
                 alert(msg);
                 document.getElementById("userManagementTab").click(); // refresh
+            });
+    }
+}
+
+document.getElementById("venueTab").addEventListener("click", function () {
+    document.getElementById("dashboardContent").style.display = "none";
+    document.getElementById("userManagementContent").style.display = "none";
+    document.getElementById("venueContent").style.display = "block";
+
+    this.classList.add("active");
+    document.getElementById("dashboardTab").classList.remove("active");
+    document.getElementById("userManagementTab").classList.remove("active");
+
+    // Fetch users
+    fetch("get_venues.php")
+        .then(response => response.json())
+        .then(users => {
+            const tbody = document.querySelector("#userTable tbody");
+            tbody.innerHTML = "";
+            users.forEach(user => {
+                const row = `<tr>
+                    <td>${user.clientemail}</td>
+                    <td>${user.department}</td>
+                    <td>${user.organization}</td>
+                    <td>${user.verification_code ? "Verified" : "Unverified"}</td>
+                    <td><button onclick="deleteUser('${user.id}')">Delete</button></td>
+                </tr>`;
+                tbody.innerHTML += row;
+            });
+        })
+        .catch(err => console.error("Error loading users:", err));
+});
+
+function deleteUser(id) {
+    if (confirm("Delete this user?")) {
+        fetch(`delete_user.php?id=${id}`)
+            .then(res => res.text())
+            .then(msg => {
+                alert(msg);
+                document.getElementById("venueTab").click(); // refresh
             });
     }
 }
