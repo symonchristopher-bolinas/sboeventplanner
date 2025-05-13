@@ -141,7 +141,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
         <div style="margin: 20px 0; clear: both;">
       <input type="text" placeholder="Search User..." style="width: 50%; padding: 8px; border-radius: 20px; border: 1px solid #ccc;">
     </div>
-        <table  style="width: 100%; border-collapse: collapse;" width="100%" id="userTable">
+        <table style="width: 100%; border-collapse: collapse;" width="100%" id="venueTable">
             <thead>
                 <tr style="background-color: #003366; color: white; padding: 10px;">
                     <th>Organizer</th>
