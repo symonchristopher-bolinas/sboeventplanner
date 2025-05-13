@@ -19,9 +19,9 @@ session_start();
         <nav>
             <ul>
                 <li><a href="index.php">Home</a></li>
-                <li><a href="contactus.php" class="active">Contact Us</a></li>
+                <li><a href="contactus.php">Contact Us</a></li>
                 <li><a href="aboutus.php">About Us</a></li>
-                <li><a href="calendar1.php">Calendar</a></li>
+                <li><a href="#" class="active">Calendar</a></li>
                 <!-- Only show user dropdown if admin or client is logged in -->
                 <?php if (isset($_SESSION['admin_logged_in']) || isset($_SESSION['client_logged_in'])): ?>
                     <li>
@@ -59,33 +59,8 @@ session_start();
             </ul>
         </nav>
     </header>
+    <iframe id="calendarFrame" style="width:100%; height:600px; border:none;"></iframe>
 
-    <section class="contact-section">
-        <h1 class="section-title">CONTACT US</h1>
-        <div class="contact-cards">
-            <div class="contact-card">
-                <img src="images/phone-icon.png" alt="Phone Icon" style="width: 100px;">
-                <h2>Call us directly at</h2>
-                <p style="font-size: 24px; font-weight: bold; color: #003399;">+0912345678</p>
-            </div>
-            <div class="contact-card">
-                <img src="images/chat-icon.png" alt="Chat Icon" style="width: 100px;">
-                <h2>Chat with our team</h2>
-                <a href="#" class="chat-button">CHAT WITH TEAM</a>
-            </div>
-        </div>
-
-        <div class="help-section">
-            <h2>How can we help?</h2>
-            <p>Our service team is available 7 days a week:<br>
-                Monday - Sunday | 8:00 AM to 5:00 PM</p>
-            <p>
-                <a href="tel:0987654321">0987654321</a> / 
-                <a href="tel:09123456789">09123456789</a> | 
-                <a href="mailto:ask@eventplaner.ph">ask@eventplaner.ph</a>
-            </p>
-        </div>
-    </section>
 <!-- Dropdown Script -->
 <script>
 function toggleDropdown() {
@@ -100,6 +75,10 @@ document.addEventListener("click", function(event) {
         menu.style.display = "none";
     }
 });
+document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("calendarFrame").src = "calendar/calendar.php";
+    });
 </script>
+
 </body>
 </html>

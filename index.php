@@ -20,6 +20,7 @@ session_start();
         <li><a href="#" class="active">Home</a></li>
         <li><a href="contactus.php">Contact Us</a></li>
         <li><a href="aboutus.php">About Us</a></li>
+        <li><a href="calendar1.php">Calendar</a></li>
         
         <!-- Only show user dropdown if admin or client is logged in -->
         <?php if (isset($_SESSION['admin_logged_in']) || isset($_SESSION['client_logged_in'])): ?>

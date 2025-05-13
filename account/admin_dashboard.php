@@ -22,8 +22,9 @@ if (!isset($_SESSION['admin_logged_in'])) {
     <div class="logo">EVENT ADMIN PORTAL</div>
     <nav>
         <a href="../index.php">Home</a>
-        <a href="#">Contact Us</a>
-        <a href="#">About Us</a>
+        <a href="../contactus.php">Contact Us</a>
+        <a href="../aboutus.php">About Us</a>
+        <a href="../calendar1.php">Calendar</a>
         <div class="admin-info">
             <i class="icon-calendar"></i>
             <i class="icon-bell"></i>
@@ -230,12 +231,12 @@ function deleteUser(id) {
             });
     }
 }
-
+</script>
+<script>
 document.getElementById("venueTab").addEventListener("click", function () {
     document.getElementById("dashboardContent").style.display = "none";
     document.getElementById("userManagementContent").style.display = "none";
     document.getElementById("venueContent").style.display = "block";
-
     this.classList.add("active");
     document.getElementById("dashboardTab").classList.remove("active");
     document.getElementById("userManagementTab").classList.remove("active");
@@ -243,15 +244,15 @@ document.getElementById("venueTab").addEventListener("click", function () {
     // Fetch users
     fetch("get_venues.php")
         .then(response => response.json())
-        .then(users => {
-            const tbody = document.querySelector("#userTable tbody");
+        .then(venues => {
+            const tbody = document.querySelector("#venueTable tbody");
             tbody.innerHTML = "";
-            users.forEach(user => {
+            venues.forEach(user => {
                 const row = `<tr>
-                    <td>${user.clientemail}</td>
-                    <td>${user.department}</td>
-                    <td>${user.organization}</td>
-                    <td>${user.verification_code ? "Verified" : "Unverified"}</td>
+                    <td>${user.organizer}</td>
+                    <td>${user.email}</td>
+                    <td>${user.status}</td>
+                    <td>${user.venue}</td>
                     <td><button onclick="deleteUser('${user.id}')">Delete</button></td>
                 </tr>`;
                 tbody.innerHTML += row;
@@ -261,7 +262,7 @@ document.getElementById("venueTab").addEventListener("click", function () {
 });
 
 function deleteUser(id) {
-    if (confirm("Delete this user?")) {
+    if (confirm("Delete this venue?")) {
         fetch(`delete_user.php?id=${id}`)
             .then(res => res.text())
             .then(msg => {

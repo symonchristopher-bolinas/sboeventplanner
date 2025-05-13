@@ -1,21 +1,17 @@
 <?php
-// DB Connection
 $conn = new mysqli("localhost", "root", "", "eventplanner");
-
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Make sure these column names match your actual database
-$query = "SELECT id, orgranizer, email, status, venue FROM venue_db";
+$query = "SELECT id, organizer, email, status, venue FROM venue_db";
 $result = $conn->query($query);
 
-$users = [];
-
+$venues = [];
 while ($row = $result->fetch_assoc()) {
-    $users[] = $row;
+    $venues[] = $row;
 }
 
 header('Content-Type: application/json');
-echo json_encode($users);
+echo json_encode($venues);
 ?>
